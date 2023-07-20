@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import net.javaguides.usermanagement.dao.UserDAO;
 import net.javaguides.usermanagement.model.User;
@@ -18,7 +19,6 @@ import net.javaguides.usermanagement.model.User;
  * ControllerServlet.java
  * This servlet acts as a page controller for the application, handling all
  * requests from the user.
- * @email Ramesh Fadatare
  */
 
 @WebServlet("/")
@@ -29,41 +29,66 @@ public class UserServlet extends HttpServlet {
 	public void init() {
 		userDAO = new UserDAO();
 	}
+	
+    private boolean isAuthenticated(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        return session != null && session.getAttribute("username") != null;
+    }
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		doGet(request, response);
-	}
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        if (isAuthenticated(request)) {
+            doGet(request, response);
+        } else {
+            response.sendRedirect("login.jsp");
+        }
+    }
+	
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        if (isAuthenticated(request)) {
+            String action = request.getServletPath();
+            try {
+                switch (action) {                    
+    			case "/new":
+    				showNewForm(request, response);
+    				break;
+    			case "/insert":
+    				insertUser(request, response);
+    				break;
+    			case "/delete":
+    				deleteUser(request, response);
+    				break;
+    			case "/edit":
+    				showEditForm(request, response);
+    				break;
+    			case "/update":
+    				updateUser(request, response);
+    				break;
+                case "/logout":
+                        handleLogout(request, response);
+                        break;
+                    default:
+                        listUser(request, response);
+                        break;
+                }
+            } catch (SQLException ex) {
+                throw new ServletException(ex);
+            }
+        } else {
+            response.sendRedirect("login.jsp");
+        }
+    }
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		String action = request.getServletPath();
-
-		try {
-			switch (action) {
-			case "/new":
-				showNewForm(request, response);
-				break;
-			case "/insert":
-				insertUser(request, response);
-				break;
-			case "/delete":
-				deleteUser(request, response);
-				break;
-			case "/edit":
-				showEditForm(request, response);
-				break;
-			case "/update":
-				updateUser(request, response);
-				break;
-			default:
-				listUser(request, response);
-				break;
-			}
-		} catch (SQLException ex) {
-			throw new ServletException(ex);
-		}
-	}
+    
+    private void handleLogout(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+        response.sendRedirect("login.jsp");
+    }
 
 	private void listUser(HttpServletRequest request, HttpServletResponse response)
 			throws SQLException, IOException, ServletException {

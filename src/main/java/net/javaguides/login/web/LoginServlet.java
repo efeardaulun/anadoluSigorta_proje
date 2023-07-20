@@ -36,15 +36,16 @@ public class LoginServlet extends HttpServlet {
         loginBean.setPassword(password);
 
         try {
-            if (loginDao.validate(loginBean)) {
-                //HttpSession session = request.getSession();
-                // session.setAttribute("username",username);
-                response.sendRedirect("user-list");
-            } else {
-                HttpSession session = request.getSession();
-                session.setAttribute("errorMessage", "Yanlış kullanıcı adı veya şifre!");
-                response.sendRedirect("login.jsp");
-            }
+        	if (loginDao.validate(loginBean)) {
+        	    HttpSession session = request.getSession(); //session kontrol et
+        	    session.setAttribute("username", username);
+        	    response.sendRedirect("user-list");
+        	} else {
+        	    HttpSession session = request.getSession();
+        	    session.setAttribute("errorMessage", "Yanlış kullanıcı adı veya şifre!");
+        	    response.sendRedirect("login.jsp");
+        	}
+
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
