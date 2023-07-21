@@ -11,23 +11,25 @@ public class User {
 	protected String name;
 	protected String email;
 	protected String brand;
-	
+	protected String plateNo;
 	public User() {
 	}
 	
-	public User(String name, String email, String brand) {
+	public User(String name, String email, String brand,String plateNo) {
 		super();
 		this.name = name;
 		this.email = email;
 		this.brand = brand;
+		this.plateNo = plateNo;
 	}
 
-	public User(int id, String name, String email, String brand) {
+	public User(int id, String name, String email, String brand,String plateNo) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.email = email;
 		this.brand = brand;
+		this.plateNo = plateNo;
 	}
 
 	public int getId() {
@@ -54,4 +56,14 @@ public class User {
 	public void setBrand(String brand) {
 		this.brand = brand;
 	}
+
+	public String getPlateNo() {
+		return plateNo;
+	}
+
+	public void setPlateNo(String plateNo) {
+		this.plateNo = plateNo;
+	}
+	
+	
 }

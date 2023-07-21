@@ -27,6 +27,8 @@
                         </div>
                         <button type="submit" class="btn btn-primary btn-block">Login</button>
                     </form>
+                    <!-- "Register" butonu için link oluşturma -->
+                    <a href="http://localhost:8080/deneme/register.jsp" class="btn btn-secondary btn-block mt-2">Register</a>
                 </div>
             </div>
         </div>

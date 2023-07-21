@@ -13,15 +13,11 @@
 
 	<header>
 		<nav class="navbar navbar-expand-md navbar-dark"
-			style="background-color: #00BFFF">
+			style="background-color: #006bb3">
 			<div>
-				<a href="https://www.javaguides.net" class="navbar-brand"> Anadolu Sigorta </a>
+            	<a href="<%=request.getContextPath()%>/list" class="navbar-brand font-weight-bold">Anadolu Sigorta</a>
 			</div>
 
-			<ul class="navbar-nav">
-				<li><a href="<%=request.getContextPath()%>/list"
-					class="nav-link">Acente</a></li>
-			</ul>
 		</nav>
 	</header>
 	<br>
@@ -66,6 +62,12 @@
 					<label>Car Brand</label> <input type="text"
 						value="<c:out value='${user.brand}' />" class="form-control"
 						name="brand">
+				</fieldset>
+				
+				<fieldset class="form-group">
+					<label>Plate No</label> <input type="text"
+						value="<c:out value='${user.plateNo}' />" class="form-control"
+						name="plateNo">
 				</fieldset>
 
 				<button type="submit" class="btn btn-success">Save</button>

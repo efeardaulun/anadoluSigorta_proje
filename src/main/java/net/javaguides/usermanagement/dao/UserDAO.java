@@ -22,13 +22,13 @@ public class UserDAO {
 	private String jdbcUsername = "root";
 	private String jdbcPassword = "efearda2404";
 
-	private static final String INSERT_USERS_SQL = "INSERT INTO users" + "  (name, email, brand) VALUES "
-			+ " (?, ?, ?);";
+	private static final String INSERT_USERS_SQL = "INSERT INTO users" + "  (name, email, brand, plateNo) VALUES "
+			+ " (?, ?, ?, ?);";
 
-	private static final String SELECT_USER_BY_ID = "select id,name,email,brand from users where id =?";
+	private static final String SELECT_USER_BY_ID = "select id,name,email,brand,plateNo from users where id =?";
 	private static final String SELECT_ALL_USERS = "select * from users";
 	private static final String DELETE_USERS_SQL = "delete from users where id = ?;";
-	private static final String UPDATE_USERS_SQL = "update users set name = ?,email= ?, brand =? where id = ?;";
+	private static final String UPDATE_USERS_SQL = "update users set name = ?,email= ?, brand =?, plateNo= ? where id = ?;";
 
 	public UserDAO() {
 	}
@@ -56,6 +56,8 @@ public class UserDAO {
 			preparedStatement.setString(1, user.getName());
 			preparedStatement.setString(2, user.getEmail());
 			preparedStatement.setString(3, user.getBrand());
+			preparedStatement.setString(4, user.getPlateNo());
+
 			System.out.println(preparedStatement);
 			preparedStatement.executeUpdate();
 		} catch (SQLException e) {
@@ -79,7 +81,9 @@ public class UserDAO {
 				String name = rs.getString("name");
 				String email = rs.getString("email");
 				String brand = rs.getString("brand");
-				user = new User(id, name, email, brand);
+				String plateNo = rs.getString("plateNo");
+
+				user = new User(id, name, email, brand,plateNo);
 			}
 		} catch (SQLException e) {
 			printSQLException(e);
@@ -106,7 +110,9 @@ public class UserDAO {
 				String name = rs.getString("name");
 				String email = rs.getString("email");
 				String brand = rs.getString("brand");
-				users.add(new User(id, name, email, brand));
+				String plateNo = rs.getString("plateNo");
+
+				users.add(new User(id, name, email, brand,plateNo));
 			}
 		} catch (SQLException e) {
 			printSQLException(e);
@@ -131,7 +137,8 @@ public class UserDAO {
 			statement.setString(1, user.getName());
 			statement.setString(2, user.getEmail());
 			statement.setString(3, user.getBrand());
-			statement.setInt(4, user.getId());
+			statement.setString(4, user.getPlateNo());
+			statement.setInt(5, user.getId());
 
 			rowUpdated = statement.executeUpdate() > 0;
 		}

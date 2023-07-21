@@ -34,7 +34,39 @@ public class LoginDao {
         }
         return status;
     }
+    
+    public int registerEmployee(LoginBean loginBean) throws ClassNotFoundException {
+        String INSERT_USERS_SQL = "INSERT INTO login" + "  (username, password) VALUES " + " (?, ?);";
 
+        int result = 0;
+
+        Class.forName("com.mysql.jdbc.Driver");
+
+        try (Connection connection = DriverManager
+            .getConnection("jdbc:mysql://localhost:3306/agents?useSSL=false", "root", "efearda2404");
+
+            // Step 2:Create a statement using connection object
+            PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USERS_SQL)) {
+            preparedStatement.setString(1, loginBean.getUsername());
+            preparedStatement.setString(2, loginBean.getPassword());
+
+
+            System.out.println(preparedStatement);
+            // Step 3: Execute the query or update query
+            result = preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            // process sql exception
+            printSQLException(e);
+        }
+        return result;
+    }
+    
+    
+    
+    
+    
+    
     private void printSQLException(SQLException ex) {
         for (Throwable e: ex) {
             if (e instanceof SQLException) {

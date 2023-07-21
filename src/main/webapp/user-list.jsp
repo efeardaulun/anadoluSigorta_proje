@@ -12,7 +12,7 @@
 
 <header>
     <nav class="navbar navbar-expand-md navbar-dark"
-         style="background-color: #00BFFF">
+         style="background-color: #006bb3">
         <div>
             <a href="<%=request.getContextPath()%>/list" class="navbar-brand font-weight-bold">Anadolu Sigorta</a>
         </div>
@@ -41,6 +41,7 @@
                 <th>Name</th>
                 <th>Email</th>
                 <th>Car Brand</th>
+                <th>Plate No</th>
                 <th>Actions</th>
             </tr>
             </thead>
@@ -53,8 +54,12 @@
                     <td><c:out value="${user.name}" /></td>
                     <td><c:out value="${user.email}" /></td>
                     <td><c:out value="${user.brand}" /></td>
-                    <td><a href="edit?id=<c:out value='${user.id}' />">Edit</a>
-                        &nbsp;&nbsp;&nbsp;&nbsp; <a href="delete?id=<c:out value='${user.id}' />">Delete</a></td>
+                    <td><c:out value="${user.plateNo}" /></td>
+                   <td>
+  <a href="edit?id=<c:out value='${user.id}' />" class="btn btn-primary">Edit</a>
+  <a href="delete?id=<c:out value='${user.id}' />" class="btn btn-danger">Delete</a>
+</td>
+                   
                 </tr>
             </c:forEach>
             <!-- } -->
