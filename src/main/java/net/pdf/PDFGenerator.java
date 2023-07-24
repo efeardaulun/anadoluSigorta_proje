@@ -4,38 +4,26 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
-import com.itextpdf.text.Header;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 
 import net.javaguides.usermanagement.model.User;
 
-import java.awt.Desktop;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 
 public class PDFGenerator {
 
-	
     public String generatePDF(User user, String filePath) {
-    	
-    	/*
-    	if (Desktop.isDesktopSupported()) {
-    	    try {
-    	        File myFile = new File(filePath);
-    	        Desktop.getDesktop().open(myFile);
-    	    } catch (IOException ex) {
-    	        // no application registered for PDFs
-    	    }
-    	}  */
-        
-    	Document document = new Document();
-        ClassLoader loader = getClass().getClassLoader();
-        if (loader.getResource(filePath) != null) {
-        	return null;
+        // Dosya yolu altında belirtilen PDF dosyasını kontrol edin
+        File existingFile = new File(filePath);
+        if (existingFile.exists()) {
+            // Eğer dosya zaten varsa yeni bir PDF oluşturmayın, mevcut dosyanın yoluyla devam edin.
+            return filePath;
         }
-       
+
+        // PDF dosyasını oluştur
+        Document document = new Document();
         try {
             PdfWriter.getInstance(document, new FileOutputStream(filePath));
             document.open();
@@ -55,18 +43,16 @@ public class PDFGenerator {
                 "Plate No: " + user.getPlateNo() + "\n"
             );
             document.add(content);
+
             document.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return filePath;   
-    	
-    	//return null;
+        return filePath;
     }
-    
-    
-} 
+}
+
 
 
 

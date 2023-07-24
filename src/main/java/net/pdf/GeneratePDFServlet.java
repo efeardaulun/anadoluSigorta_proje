@@ -24,38 +24,29 @@ public class GeneratePDFServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    	//String showPDF = request.getParameter("showPDF");
-    	
-    	
-    	
         int id = Integer.parseInt(request.getParameter("id"));
-        String name = request.getParameter("name");
-        String email = request.getParameter("email");
-        String brand = request.getParameter("brand");
-        String plateNo = request.getParameter("plateNo");
-        String filePath = request.getParameter("filePath");
 
-        User user = new User(id, name, email, brand, plateNo);
-        try {
-			userDAO.insertUser(user);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        // UserDAO kullanarak kullanıcı bilgilerini al
+        User user = userDAO.selectUser(id);
 
-        PDFGenerator p = new PDFGenerator();
-        try {
-            p.generatePDF(user, filePath);
-		}catch (Exception e){
-			e.printStackTrace();
-		}
-        
+        // Kullanıcı bilgileri alındıysa PDF oluştur
+        if (user != null) {
+            String filePath = "/Users/efeardaulun/eclipse-workspace/deneme/files/" + user.getId() + "_kasko_police.pdf";
 
-        // PDF oluşturulduktan sonra kullanıcıyı ana sayfaya yönlendirebilirsiniz
-        response.sendRedirect(request.getContextPath() + "/list");
+            PDFGenerator p = new PDFGenerator();
+            String pdfPath = p.generatePDF(user, filePath);
+
+            if (pdfPath != null) {
+                // PDF oluşturulduktan sonra kullanıcıyı ana sayfaya yönlendir
+                response.sendRedirect(request.getContextPath() + "/list");
+            } else {
+                request.setAttribute("message", "Önceden oluşturulmuş bir PDF dosyası mevcut.");
+                request.getRequestDispatcher("/user-list.jsp").forward(request, response);
+            }
+        } else {
+            // Kullanıcı bulunamadı hatası durumunda kullanıcıya bir hata mesajı göster
+            // Örneğin: request.setAttribute("errorMessage", "Kullanıcı bulunamadı.");
+            // Ardından hata sayfasına yönlendir
+        }
     }
-    
 }
-
-
-
