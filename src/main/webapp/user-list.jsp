@@ -46,24 +46,30 @@
             </tr>
             </thead>
             <tbody>
-            <!--   for (Todo todo: todos) {  -->
-            <c:forEach var="user" items="${listUser}">
+    <c:forEach var="user" items="${listUser}">
+        <tr>
+            <td><c:out value="${user.id}" /></td>
+            <td><c:out value="${user.name}" /></td>
+            <td><c:out value="${user.email}" /></td>
+            <td><c:out value="${user.brand}" /></td>
+            <td><c:out value="${user.plateNo}" /></td>
+			<td>
+			    <a href="edit?id=<c:out value='${user.id}' />" class="btn btn-primary">Edit</a>
+			    <a href="delete?id=<c:out value='${user.id}' />" class="btn btn-danger">Delete</a>
+			    <form action="<%=request.getContextPath()%>/generatePDF" method="post">
+			        <input type="hidden" name="id" value="<c:out value='${user.id}' />">
+			        <input type="hidden" name="name" value="<c:out value='${user.name}' />">
+			        <input type="hidden" name="email" value="<c:out value='${user.email}' />">
+			        <input type="hidden" name="brand" value="<c:out value='${user.brand}' />">
+			        <input type="hidden" name="plateNo" value="<c:out value='${user.plateNo}' />">
+			        <input type="hidden" name="filePath" value="/Users/efeardaulun/eclipse-workspace/deneme/files/${user.id}_kasko_police.pdf">
+			        <input type="submit" value="Generate PDF" class="btn btn-info">
+			    </form>
+			</td>
 
-                <tr>
-                    <td><c:out value="${user.id}" /></td>
-                    <td><c:out value="${user.name}" /></td>
-                    <td><c:out value="${user.email}" /></td>
-                    <td><c:out value="${user.brand}" /></td>
-                    <td><c:out value="${user.plateNo}" /></td>
-                   <td>
-  <a href="edit?id=<c:out value='${user.id}' />" class="btn btn-primary">Edit</a>
-  <a href="delete?id=<c:out value='${user.id}' />" class="btn btn-danger">Delete</a>
-</td>
-                   
-                </tr>
-            </c:forEach>
-            <!-- } -->
-            </tbody>
+        </tr>
+    </c:forEach>
+</tbody>
         </table>
     </div>
 </div>

@@ -59,10 +59,20 @@
 				</fieldset>
 
 				<fieldset class="form-group">
-					<label>Car Brand</label> <input type="text"
-						value="<c:out value='${user.brand}' />" class="form-control"
-						name="brand">
+				    <label>Car Brand</label>
+				    <select class="form-control" name="brand">
+				        <option value="Mercedes" <c:if test="${user != null && user.brand == 'Mercedes'}">selected</c:if>>Mercedes</option>
+				        <option value="BMW" <c:if test="${user != null && user.brand == 'BMW'}">selected</c:if>>BMW</option>
+				        <option value="Audi" <c:if test="${user != null && user.brand == 'Audi'}">selected</c:if>>Audi</option>
+				        <option value="Toyota" <c:if test="${user != null && user.brand == 'Toyota'}">selected</c:if>>Toyota</option>
+				        <option value="Honda" <c:if test="${user != null && user.brand == 'Honda'}">selected</c:if>>Honda</option>
+				        <option value="Ford" <c:if test="${user != null && user.brand == 'Ford'}">selected</c:if>>Ford</option>
+				        <option value="Chevrolet" <c:if test="${user != null && user.brand == 'Chevrolet'}">selected</c:if>>Chevrolet</option>
+				        <option value="Volkswagen" <c:if test="${user != null && user.brand == 'Volkswagen'}">selected</c:if>>Volkswagen</option>
+				    </select>
 				</fieldset>
+
+
 				
 				<fieldset class="form-group">
 					<label>Plate No</label> <input type="text"
