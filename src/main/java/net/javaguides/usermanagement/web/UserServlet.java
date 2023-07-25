@@ -92,7 +92,7 @@ public class UserServlet extends HttpServlet {
 
 	private void listUser(HttpServletRequest request, HttpServletResponse response)
 			throws SQLException, IOException, ServletException {
-		List<User> listUser = userDAO.selectAllUsers();
+		List<User> listUser = userDAO.selectUserByAgents(request);
 		request.setAttribute("listUser", listUser);
 		RequestDispatcher dispatcher = request.getRequestDispatcher("user-list.jsp");
 		dispatcher.forward(request, response);
@@ -120,8 +120,11 @@ public class UserServlet extends HttpServlet {
 		String email = request.getParameter("email");
 		String brand = request.getParameter("brand");
 		String plateNo = request.getParameter("plateNo");
+	    HttpSession session = request.getSession(); 
+	    String agent_username = (String) session.getAttribute("username");
 
-		User newUser = new User(name, email, brand,plateNo);
+
+		User newUser = new User(name, email, brand,plateNo,agent_username);
 		userDAO.insertUser(newUser);
 		response.sendRedirect("list");
 	}
@@ -133,9 +136,11 @@ public class UserServlet extends HttpServlet {
 		String email = request.getParameter("email");
 		String brand = request.getParameter("brand");
 		String plateNo = request.getParameter("plateNo");
+		HttpSession session = request.getSession();
+		String agent_username = (String) session.getAttribute("username");
 
 
-		User book = new User(id, name, email, brand,plateNo);
+		User book = new User(id, name, email, brand,plateNo,agent_username);
 		userDAO.updateUser(book);
 		response.sendRedirect("list");
 	}

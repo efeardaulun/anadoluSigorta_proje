@@ -78,7 +78,8 @@
                                 <input type="hidden" name="name" value="<c:out value='${user.name}' />">
                                 <input type="hidden" name="email" value="<c:out value='${user.email}' />">
                                 <input type="hidden" name="brand" value="<c:out value='${user.brand}' />">
-                                <input type="hidden" name="plateNo" value="<c:out value='${user.plateNo}' />">
+                                <input type="hidden" name="plateNo" value="<c:out value='${user.plateNo}' />">                                
+                                
                                 <input type="hidden" name="filePath" value="/Users/efeardaulun/eclipse-workspace/deneme/files/${user.id}_kasko_police.pdf">
                                 <input type="submit" value="Generate PDF" class="btn btn-info">
                             </form>

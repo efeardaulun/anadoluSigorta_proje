@@ -8,6 +8,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import net.javaguides.usermanagement.model.User;
 
 public class UserDAO {
@@ -15,13 +18,13 @@ public class UserDAO {
 	private String jdbcUsername = "root";
 	private String jdbcPassword = "efearda2404";
 
-	private static final String INSERT_USERS_SQL = "INSERT INTO users" + "  (name, email, brand, plateNo) VALUES "
-			+ " (?, ?, ?, ?);";
+	private static final String INSERT_USERS_SQL = "INSERT INTO users" + "  (name, email, brand, plateNo,agent_username) VALUES "
+			+ " (?, ?, ?, ?,?);";
 
-	private static final String SELECT_USER_BY_ID = "select id,name,email,brand,plateNo from users where id =?";
-	private static final String SELECT_ALL_USERS = "select * from users";
+	private static final String SELECT_USER_BY_ID = "select * from users where id =?";
+	private static final String SELECT_USER_BY_AGENTS = "select * from users where agent_username = ?";
 	private static final String DELETE_USERS_SQL = "delete from users where id = ?;";
-	private static final String UPDATE_USERS_SQL = "update users set name = ?,email= ?, brand =?, plateNo= ? where id = ?;";
+	private static final String UPDATE_USERS_SQL = "update users set name = ?,email= ?, brand =?, plateNo= ?,agent_username= ? where id = ?;";
 
 	public UserDAO() {
 	}
@@ -50,6 +53,8 @@ public class UserDAO {
 			preparedStatement.setString(2, user.getEmail());
 			preparedStatement.setString(3, user.getBrand());
 			preparedStatement.setString(4, user.getPlateNo());
+			preparedStatement.setString(5, user.getAgent_username());
+
 
 			System.out.println(preparedStatement);
 			preparedStatement.executeUpdate();
@@ -75,8 +80,10 @@ public class UserDAO {
 				String email = rs.getString("email");
 				String brand = rs.getString("brand");
 				String plateNo = rs.getString("plateNo");
+				String agent_username = rs.getString("agent_username");
 
-				user = new User(id, name, email, brand,plateNo);
+
+				user = new User(id, name, email, brand,plateNo,agent_username);
 			}
 		} catch (SQLException e) {
 			printSQLException(e);
@@ -84,7 +91,7 @@ public class UserDAO {
 		return user;
 	}
 
-	public List<User> selectAllUsers() {
+	public List<User> selectUserByAgents(HttpServletRequest request) {
 
 		// using try-with-resources to avoid closing resources (boiler plate code)
 		List<User> users = new ArrayList<>();
@@ -92,9 +99,11 @@ public class UserDAO {
 		try (Connection connection = getConnection();
 
 				// Step 2:Create a statement using connection object
-			PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_USERS);) {
+			PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER_BY_AGENTS);) {
 			System.out.println(preparedStatement);
 			// Step 3: Execute the query or update query
+			HttpSession session = request.getSession();
+			preparedStatement.setString(1, (String) session.getAttribute("username"));
 			ResultSet rs = preparedStatement.executeQuery();
 
 			// Step 4: Process the ResultSet object.
@@ -104,8 +113,10 @@ public class UserDAO {
 				String email = rs.getString("email");
 				String brand = rs.getString("brand");
 				String plateNo = rs.getString("plateNo");
+				String agent_username = rs.getString("agent_username");
 
-				users.add(new User(id, name, email, brand,plateNo));
+
+				users.add(new User(id, name, email, brand,plateNo,agent_username));
 			}
 		} catch (SQLException e) {
 			printSQLException(e);
@@ -131,7 +142,8 @@ public class UserDAO {
 			statement.setString(2, user.getEmail());
 			statement.setString(3, user.getBrand());
 			statement.setString(4, user.getPlateNo());
-			statement.setInt(5, user.getId());
+			statement.setString(5, user.getAgent_username());
+			statement.setInt(6, user.getId());
 
 			rowUpdated = statement.executeUpdate() > 0;
 		}
